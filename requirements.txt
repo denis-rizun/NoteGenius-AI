@@ -17,4 +17,3 @@ httpx==0.28.1
 
 # ------------ Data Science & Text Processing ------------
 numpy==2.2.3
-nltk==3.9

@@ -1,6 +1,5 @@
 from fastapi import FastAPI, Request, HTTPException
 from fastapi.exceptions import RequestValidationError
-from pydantic import ValidationError
 
 from src.backend.utils.helper import ApiHelper
 from src.backend.utils.schemas import (
@@ -49,7 +48,7 @@ async def configure_db():
 async def create_note(data: NotePostSchema, session: SessionDepends):
     data_dict = dict(data)
     data_dict["version_number"] = 1
-    return await ApiHelper.create(data=data_dict, session=session)
+    return await ApiHelper.create_note(data=data_dict, session=session)
 
 
 # {
@@ -67,8 +66,8 @@ async def create_note(data: NotePostSchema, session: SessionDepends):
     summary="Get note by ID",
     description="<h1>Fetches a note from the database based on the provided ID.</h1>",
 )
-async def get_by_id_note(id: int, session: SessionDepends):
-    return await ApiHelper.get_by_id(id, session)
+async def get_note_by_id(id: int, session: SessionDepends):
+    return await ApiHelper.get_note_by_id(id=id, session=session)
 
 
 @app.get(
@@ -77,17 +76,16 @@ async def get_by_id_note(id: int, session: SessionDepends):
     description="<h1>Fetches all notes stored in the database.</h1>",
 )
 async def get_all_notes(session: SessionDepends):
-    return await ApiHelper.get_all(session)
+    return await ApiHelper.get_all_notes(session=session)
 
 
 @app.put(
-    path="/put/{id}",
+    path="/update/{id}",
     summary="Update a note",
     description="<h1>Updates an existing note in the database based on the provided ID and data.</h1>",
 )
-async def put_note(id: int, data: NotePutSchema, session: SessionDepends):
-    obj = await ApiHelper.get_by_id(id, session)
-    return await ApiHelper.put(obj, session, data)
+async def update_note(id: int, data: NotePutSchema, session: SessionDepends):
+    return await ApiHelper.update_note(id=id, session=session, data=data)
 
 
 @app.delete(
@@ -96,5 +94,29 @@ async def put_note(id: int, data: NotePutSchema, session: SessionDepends):
     description="<h1>Deletes a note from the database based on the provided ID.</h1>",
 )
 async def delete_note(id: int, session: SessionDepends):
-    obj = await ApiHelper.get_by_id(id, session)
-    return await ApiHelper.delete(obj, session)
+    return await ApiHelper.delete_note(id=id, session=session)
+
+
+@app.get("/analytic/total_words")
+async def total_words(session: SessionDepends):
+    return await ApiHelper.get_total_word_count(session=session)
+
+
+@app.get("/analytic/length")
+async def length(session: SessionDepends):
+    return await ApiHelper.get_average_note_length(session=session)
+
+
+@app.get("/analytic/common_words")
+async def common_words(session: SessionDepends, min_count: int = 3):
+    return await ApiHelper.get_most_common_words(session=session, min_count=min_count)
+
+
+@app.get("/analytic/longest")
+async def longest(session: SessionDepends, top_n: int = 3):
+    return await ApiHelper.get_longest_notes(session=session, top_n=top_n)
+
+
+@app.get("/analytic/shortest")
+async def shortest(session: SessionDepends, top_n: int = 3):
+    return await ApiHelper.get_shortest_notes(session=session, top_n=top_n)

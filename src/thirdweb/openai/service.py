@@ -2,7 +2,7 @@ from typing import Optional
 
 from httpx import AsyncClient, Response, Timeout
 
-from src.thirdweb.abstraction import AIService
+from src.thirdweb.openai.abstraction import AIService
 
 
 class OpenAIService(AIService):
