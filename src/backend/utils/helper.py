@@ -4,20 +4,29 @@ from fastapi.encoders import jsonable_encoder
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette.responses import JSONResponse
 
+from src.config import env_config
 from src.backend.utils.decorator import handle_exceptions
 from src.backend.utils.schemas import (
-    NotePostSchema,
     NotePutSchema,
     NoteGetSchemaResponse,
 )
 from src.database.database.models import Base
 from src.database.database.queries import NoteQuery
+from src.thirdweb.service import OpenAIService
+from src.thirdweb.utils import PromptUtils
 
 
 class ApiHelper:
     @staticmethod
     @handle_exceptions
     async def create(data: dict, session: AsyncSession):
+        ai_service = OpenAIService(
+            model=env_config.OPENAI_MODEL,
+            api_key=env_config.OPENAI_API_KEY,
+        )
+        prompt = PromptUtils.create_prompt_for_summarization(text=data["content"])
+        data["summarization"] = await ai_service.fetch_data(prompt)
+        print(data)
         repo = NoteQuery(session)
         obj_id = await repo.create(data)
         return ApiHelper.success(status_code=201, content={"object id": obj_id})

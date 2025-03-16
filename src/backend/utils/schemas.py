@@ -25,6 +25,7 @@ class NoteGetSchemaResponse(BaseModel):
     id: int
     title: str
     content: str
+    summarization: str
     version_number: int
     created_at: str
     updated_at: str

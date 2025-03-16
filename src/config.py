@@ -12,8 +12,8 @@ class EnvConfig(BaseSettings):
     DB_PASS: str
     DB_NAME: str
 
-    GEMINI_API_KEY: str
-    GEMINI_MODEL: str
+    OPENAI_API_KEY: str
+    OPENAI_MODEL: str
 
     @property
     def get_db_url(self):

@@ -17,6 +17,7 @@ class NoteTriggerQuery:
                         note_id=target.id,
                         title=target.title,
                         content=target.content,
+                        summarization=target.summarization,
                         created_at=target.created_at,
                         version_number=target.version_number,
                     )

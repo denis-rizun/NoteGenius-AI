@@ -7,6 +7,7 @@ from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 class Base(DeclarativeBase):
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     content: Mapped[str]
+    summarization: Mapped[str]
     created_at: Mapped[datetime] = mapped_column(default=func.now())
     version_number: Mapped[int]
 
