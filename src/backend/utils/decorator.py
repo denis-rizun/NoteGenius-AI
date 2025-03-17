@@ -1,8 +1,8 @@
 from functools import wraps
 
 from fastapi import HTTPException
-from pydantic import ValidationError
 
+from src.backend.utils.enums import ErrorMessages
 from src.backend.utils.exceptions import (
     DatabaseError,
     NotFoundError,
@@ -20,25 +20,15 @@ def handle_exceptions(func):
                 status_code=404,
                 detail=str(e),
             )
-        except DatabaseError:
-            raise HTTPException(
-                status_code=500,
-                detail="Oops... We ran into an unexpected problem. Please try again later.",
-            )
         except DuplicateDataError:
             raise HTTPException(
                 status_code=400,
-                detail="The provided data violates unique constraints. Please ensure the data is unique and try again.",
+                detail=ErrorMessages.DUPLICATE_DATA.value,
             )
-        except ValidationError:
+        except DatabaseError:
             raise HTTPException(
-                status_code=400,
-                detail="The provided data is invalid. Please carefully review the expected data schema and try again.",
-            )
-        except Exception as e:
-            raise HTTPException(
-                status_code=400,
-                detail=f"check {str(e)}",
+                status_code=500,
+                detail=ErrorMessages.DATABASE_CRASHED.value,
             )
 
     return wrapper
