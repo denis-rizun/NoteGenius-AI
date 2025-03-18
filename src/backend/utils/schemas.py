@@ -67,6 +67,10 @@ class NotePutSchema(BaseModel):
         return values
 
 
+class NotePostSchemaResponse(BaseModel):
+    note_id: int
+
+
 class NoteGetSchemaResponse(BaseModel):
     id: int
     title: str

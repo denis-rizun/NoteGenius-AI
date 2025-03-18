@@ -21,9 +21,11 @@ class NoteAnalyticsService:
         """Returns the most common words across all notes, excluding stopwords."""
         words = self._extract_filtered_words()
         word_counter = Counter(words)
-        return [
-            (word, count) for word, count in word_counter.items() if count > min_count
-        ]
+        return {
+            word: count
+            for word, count in word_counter.items()
+            if count > min_count
+        }
 
     def get_longest_notes(self, top_n=3) -> list[dict]:
         """Returns the top N the longest notes based on word count."""
@@ -40,7 +42,8 @@ class NoteAnalyticsService:
     def _get_word_counts(self) -> np.ndarray:
         """Helper method to get word counts for all notes."""
         return np.array(
-            [len(note["content"].split()) for note in self.notes], dtype=int
+            [len(note["content"].split()) for note in self.notes],
+            dtype=int
         )
 
     def _extract_filtered_words(self) -> list[str]:

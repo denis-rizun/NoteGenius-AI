@@ -1,6 +1,7 @@
 from fastapi import FastAPI, Request, HTTPException
 from fastapi.exceptions import RequestValidationError
 
+from src.backend.utils.enums import ErrorMessages
 from src.backend.utils.exceptions import InputLengthFieldError, InputEmptyFieldError
 from src.backend.utils.helper import ApiHelper
 from src.backend.utils.schemas import (
@@ -47,7 +48,7 @@ async def validation_exception_handler(
 ):
     raise HTTPException(
         status_code=400,
-        detail="Invalid data format. The provided input does not conform to the expected schema. Please ensure all fields are correctly structured and follow the specified format.",
+        detail=ErrorMessages.NOT_CONFORM_SCHEMA.value
     )
 
 
@@ -101,7 +102,8 @@ async def get_all_notes(session: SessionDepends):
     description="<h1>Updates an existing note in the database based on the provided ID and data.</h1>",
 )
 async def update_note(id: int, data: NotePutSchema, session: SessionDepends):
-    return await ApiHelper.update_note(id=id, session=session, data=data)
+    updated_data = data.model_dump(exclude_unset=True)
+    return await ApiHelper.update_note(id=id, session=session, data=updated_data)
 
 
 @app.delete(
