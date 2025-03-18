@@ -12,7 +12,6 @@ from tests.integration_tests.conftest import (
 @pytest.mark.asyncio(loop_scope="session")
 async def test_create_note_success(note_repo):
     """Tests creating a note and checks if the ID is returned."""
-
     data = {
         "title": "Project Update: March 2025",
         "content": "Today, we successfully integrated the new recommendation engine.",
@@ -20,9 +19,7 @@ async def test_create_note_success(note_repo):
         "version_number": 1,
     }
     note_id = await note_repo.create(data)
-
     assert isinstance(note_id, int)
-
     note = await note_repo.get_by_id(note_id)
 
     assert note is not None
@@ -39,7 +36,6 @@ async def test_create_note_success(note_repo):
 @pytest.mark.asyncio(loop_scope="session")
 async def test_get_all_notes_success(create_data, note_repo):
     """Tests retrieving all notes with different dataset sizes."""
-
     result = await note_repo.get_all()
 
     assert len(result) == 2
@@ -58,9 +54,7 @@ async def test_get_all_notes_success(create_data, note_repo):
 @pytest.mark.asyncio(loop_scope="session")
 async def test_update_note_success(create_data, note_repo):
     """Tests updating a note and version increment."""
-
     note = await note_repo.get_by_id(create_data[0]["id"])
-
     assert note.version_number == 1
 
     await note_repo.put(note, {"title": "Updated", "content": "New content"})
@@ -76,13 +70,9 @@ async def test_update_note_success(create_data, note_repo):
 @pytest.mark.asyncio(loop_scope="session")
 async def test_delete_note_success(create_data, note_repo):
     """Tests deleting a note."""
-
     note = await note_repo.get_by_id(create_data[0]["id"])
-
     assert note is not None
-
     await note_repo.delete(note)
     deleted_note = await note_repo.get_by_id(create_data[0]["id"])
-
     assert deleted_note is None
 # ----------------------------DELETE NOTE SUCCESS----------------------------------------------------

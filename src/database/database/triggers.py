@@ -1,7 +1,8 @@
 from sqlalchemy import event
-from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import Session
-
+from sqlalchemy.exc import SQLAlchemyError
+from sqlalchemy.orm.mapper import Mapper
+from sqlalchemy.engine.base import Connection
 from src.database.database.models import NoteModel, NoteVersionModel
 
 
@@ -9,7 +10,7 @@ class NoteTriggerQuery:
     @staticmethod
     @event.listens_for(NoteModel, "after_insert")
     @event.listens_for(NoteModel, "after_update")
-    def create_version_after_insert_or_update(mapper, connection, target: NoteModel):
+    def create_version_after_insert_or_update(mapper: Mapper, connection: Connection, target: NoteModel) -> None:
         with Session(bind=connection) as sync_session:
             try:
                 sync_session.add(

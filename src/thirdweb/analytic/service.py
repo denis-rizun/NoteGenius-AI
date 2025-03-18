@@ -1,7 +1,7 @@
 import numpy as np
 import string
 from collections import Counter
-from src.config import stopwords
+from src.config import STOPWORDS
 
 
 class NoteAnalyticsService:
@@ -15,7 +15,11 @@ class NoteAnalyticsService:
     def get_average_note_length(self) -> float:
         """Returns the average word count per note."""
         word_counts = self._get_word_counts()
-        return float(word_counts.mean()) if word_counts.size > 0 else 0.0
+        return (
+            float(word_counts.mean())
+            if word_counts.size > 0
+            else 0.0
+        )
 
     def get_most_common_words(self, min_count=3) -> dict:
         """Returns the most common words across all notes, excluding stopwords."""
@@ -52,5 +56,5 @@ class NoteAnalyticsService:
         return [
             word.lower().strip(string.punctuation)
             for word in all_words
-            if word.lower() not in stopwords
+            if word.lower() not in STOPWORDS
         ]

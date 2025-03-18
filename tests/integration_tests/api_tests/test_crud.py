@@ -14,8 +14,6 @@ from tests.integration_tests.conftest import (
 )
 
 
-
-
 # ----------------------------CREATE NOTE----------------------------------------------------
 @pytest.mark.skipif(note_skip_create, reason="The flag 'note_skip_create' is active!")
 @pytest.mark.asyncio(loop_scope="session")
@@ -23,7 +21,7 @@ async def test_create_note_success(client):
     """Test creating a note successfully via the /post endpoint"""
 
     response = await client.post(
-        url="/post",
+        url="/crud/post",
         json={
             "title": "Project Update: March 2025",
             "content": "Today, we made significant progress on the AI-powered resume screening project. We successfully integrated the new recommendation engine, which will enhance the accuracy of candidate suggestions. The team also completed a major update to the database, improving query speed and reliability. A few issues remain with data inconsistency, but the engineering team is already working on a solution. We expect to have this fixed by the end of the week. Next steps involve finalizing the API documentation and preparing for the internal demo scheduled for next month.",
@@ -75,8 +73,7 @@ async def test_create_note_success(client):
 )
 async def test_create_note_error(client, note_data, expected_status, expected_error_message):
     """Test creating a note with invalid data via the /post endpoint"""
-
-    response = await client.post("/post", json=note_data)
+    response = await client.post("/crud/post", json=note_data)
 
     assert response.status_code == expected_status
     assert expected_error_message in response.json()["detail"]
@@ -88,8 +85,7 @@ async def test_create_note_error(client, note_data, expected_status, expected_er
 @pytest.mark.asyncio(loop_scope="session")
 async def test_get_note_by_id_success(client, id):
     """Test retrieving a note by its ID via the /get/{id} endpoint"""
-
-    get_response = await client.get(f"/get/{id}")
+    get_response = await client.get(f"/crud/get/{id}")
 
     assert get_response.status_code == 200
 
@@ -122,8 +118,7 @@ async def test_get_note_by_id_success(client, id):
 )
 async def test_get_note_by_id_error(client, note_id, expected_status, expected_detail):
     """Test retrieving a note by ID with invalid or non-existent ID via the /get/{id} endpoint"""
-
-    get_response = await client.get(f"/get/{note_id}")
+    get_response = await client.get(f"/crud/get/{note_id}")
 
     assert get_response.status_code == expected_status
     assert "detail" in get_response.json()
@@ -136,13 +131,9 @@ async def test_get_note_by_id_error(client, note_id, expected_status, expected_d
 @pytest.mark.asyncio(loop_scope="session")
 async def test_get_all_notes_success(client, id):
     """Test retrieving all notes via the /get endpoint"""
-
-    response = await client.get("/get")
-
+    response = await client.get("/crud/get")
     assert response.status_code == 200
-
     notes = response.json()
-
     assert isinstance(notes, list)
     assert len(notes) == 1
 
@@ -169,13 +160,9 @@ async def test_get_all_notes_success(client, id):
 @pytest.mark.asyncio(loop_scope="session")
 async def test_get_notes_error(client):
     """Test retrieving all notes when no notes are available via the /get endpoint"""
-
-    response = await client.get("/get")
-
+    response = await client.get("/crud/get")
     assert response.status_code == 404
-
     detail = response.json()["detail"]
-
     assert detail == ErrorMessages.NOT_FOUND_MULTI.value
 # ----------------------------GET NOTE ALL----------------------------------------------------
 
@@ -185,8 +172,7 @@ async def test_get_notes_error(client):
 @pytest.mark.asyncio(loop_scope="session")
 async def test_update_note_success(client, id):
     """Test updating a note successfully via the /update/{id} endpoint"""
-
-    update_response = await client.put(f"/update/{id}", json={"title": "Updated Title"})
+    update_response = await client.put(f"/crud/update/{id}", json={"title": "Updated Title"})
 
     assert update_response.status_code == 204
 
@@ -213,8 +199,7 @@ async def test_update_note_error(
         expected_response
 ):
     """Test updating a note with invalid or incomplete data via the /update/{id} endpoint"""
-
-    update_response = await client.put(f"/update/{note_id}", json=update_data)
+    update_response = await client.put(f"/crud/update/{note_id}", json=update_data)
 
     assert update_response.status_code == expected_status
     assert update_response.json() == expected_response
@@ -226,19 +211,17 @@ async def test_update_note_error(
 @pytest.mark.asyncio(loop_scope="session")
 async def test_delete_note_success(client, id):
     """Test deleting a note successfully via the /delete/{id} endpoint"""
-
-    delete_response = await client.delete(f"/delete/{id}")
+    delete_response = await client.delete(f"/crud/delete/{id}")
 
     assert delete_response.status_code == 204
 
 
 @pytest.mark.skipif(note_skip_delete, reason="The flag 'note_skip_delete' is active!")
 @pytest.mark.asyncio(loop_scope="session")
-async def test_delete_note(client):
+async def test_delete_note_error(client):
     """Test deleting a note that does not exist via the /delete/{id} endpoint"""
-
     note_id = randint(50, 100)
-    delete_response = await client.delete(f"/delete/{note_id}")
+    delete_response = await client.delete(f"/crud/delete/{note_id}")
 
     assert delete_response.status_code == 404
     assert delete_response.json()["detail"] == ErrorMessages.NOT_FOUND_SINGLE.value

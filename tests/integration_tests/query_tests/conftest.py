@@ -33,15 +33,15 @@ async def setup_test_db():
 @pytest_asyncio.fixture(scope="function")
 async def session():
     """
-        Fixture to create and provide a database session for each test function.
+    Fixture to create and provide a database session for each test function.
 
-        This fixture establishes a new session for each test case using
-        the async_session context manager. The session is yielded to the
-        test function and automatically closed after the test completes.
+    This fixture establishes a new session for each test case using
+    the async_session context manager. The session is yielded to the
+    test function and automatically closed after the test completes.
 
-        Returns:
-            AsyncSession: A session object for interacting with the database.
-        """
+    Returns:
+        AsyncSession: A session object for interacting with the database.
+    """
     async with async_session() as session:
         yield session
 
@@ -49,20 +49,20 @@ async def session():
 @pytest.fixture
 async def create_data(session):
     """
-        Fixture to create a set of sample notes in the database for testing.
+    Fixture to create a set of sample notes in the database for testing.
 
-        This fixture uses the provided `session` to create multiple note
-        entries in the database. It then returns a list of dictionaries
-        containing the note data
+    This fixture uses the provided `session` to create multiple note
+    entries in the database. It then returns a list of dictionaries
+    containing the note data
 
-        Args:
-            session (AsyncSession): The database session to interact with the database.
+    Args:
+        session (AsyncSession): The database session to interact with the database.
 
-        Returns:
-            list[dict]: A list of dictionaries representing the created notes,
-                        each containing the 'id', 'title', 'content',
-                        'summarization', and 'version_number'.
-        """
+    Returns:
+        list[dict]: A list of dictionaries representing the created notes,
+                    each containing the 'id', 'title', 'content',
+                    'summarization', and 'version_number'.
+    """
     notes = [
         {
         "title": "Project Update: March 2025",

@@ -6,7 +6,7 @@ from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, Asyn
 from src.config import env_config
 from src.database.database.triggers import NoteTriggerQuery
 
-engine = create_async_engine(url=env_config.get_db_url, echo=True)
+engine = create_async_engine(url=env_config.get_db_url, echo=False)
 
 async_session = async_sessionmaker(bind=engine, expire_on_commit=False)
 

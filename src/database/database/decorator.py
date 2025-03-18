@@ -10,9 +10,9 @@ def handle_sqlalchemy_error(func):
     async def wrapper(self, *args, **kwargs):
         try:
             return await func(self, *args, **kwargs)
-        except IntegrityError as e:  # log it
+        except IntegrityError as e:
             raise DuplicateDataError(str(e))
-        except SQLAlchemyError as e:  # log it
+        except SQLAlchemyError as e:
             raise DatabaseError(str(e))
 
     return wrapper

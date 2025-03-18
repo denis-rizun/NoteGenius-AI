@@ -20,7 +20,7 @@ async def client():
     """
     async with AsyncClient(
             transport=ASGITransport(app=app),
-            base_url="http://test"
+            base_url="http://test/api/v1"
     ) as ac:
         yield ac
 
@@ -51,7 +51,7 @@ async def id(client):
     and returns the generated note ID for use in tests.
     """
     response = await client.post(
-        url="/post",
+        url="/crud/post",
         json={"title": "Project Update: March 2025", "content": "Test content!"},
     )
     return response.json()["note_id"]
@@ -65,14 +65,14 @@ async def prepare_data(client):
     testing features like analytics and retrieval.
     """
     await client.post(
-        url="/post",
+        url="/crud/post",
         json={
             "title": "Short",
             "content": "Tiny Note, Note"
         }
     )
     await client.post(
-        url="/post",
+        url="/crud/post",
         json={
             "title": "Long",
             "content": "Not Tiny, but a much longer Note Note. woah longer"
