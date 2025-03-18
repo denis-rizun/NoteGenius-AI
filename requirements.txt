@@ -17,3 +17,8 @@ httpx==0.28.1
 
 # ------------ Data Science & Text Processing ------------
 numpy==2.2.3
+
+# ------------ Testing ------------
+pytest==8.3.5
+pytest-asyncio==0.25.3
+aiosqlite==0.21.0

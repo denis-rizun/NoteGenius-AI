@@ -31,6 +31,25 @@ services:
     networks:
       - nw
 
+  test:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - PYTHONPATH=/app/src
+      - DB_HOST=${DB_HOST}
+      - DB_PORT=${DB_PORT}
+      - DB_USER=${DB_USER}
+      - DB_PASS=${DB_PASS}
+      - DB_NAME=${DB_NAME}
+    command: pytest  # pytest -s -v
+    volumes:
+      - .:/app
+    depends_on:
+      - db
+    networks:
+      - nw
+
 volumes:
   postgres_data:
 

@@ -12,6 +12,8 @@ class EnvConfig(BaseSettings):
     DB_PASS: str
     DB_NAME: str
 
+    TEST_DB_URL: str
+
     OPENAI_API_KEY: str
     OPENAI_MODEL: str
 
