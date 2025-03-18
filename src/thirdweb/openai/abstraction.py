@@ -63,7 +63,7 @@ class AIService(ABC):
         ...
 
     @abstractmethod
-    async def _get_response(self, user_prompt: str) -> Response:
+    async def get_response(self, user_prompt: str) -> Response:
         """
         Prepare the request, send it to the AI service, and return the response.
 

@@ -77,7 +77,7 @@ async def test_most_common_words_success(client, prepare_data):
 async def test_most_common_words_error(client):
     """Test retrieving the most common words with an invalid minimum count via the /analytic/common_words endpoint"""
 
-    response = await client.get("/analytic/common_words?min_count=1")
+    response = await client.get("/analytic/common_words?min_count=2")
 
     assert response.status_code == 404
     assert response.json()["detail"] == ErrorMessages.NOT_FOUND_MULTI

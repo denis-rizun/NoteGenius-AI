@@ -17,7 +17,7 @@ class NoteAnalyticsService:
         word_counts = self._get_word_counts()
         return float(word_counts.mean()) if word_counts.size > 0 else 0.0
 
-    def get_most_common_words(self, min_count=3) -> list[tuple[str, int]]:
+    def get_most_common_words(self, min_count=3) -> dict:
         """Returns the most common words across all notes, excluding stopwords."""
         words = self._extract_filtered_words()
         word_counter = Counter(words)

@@ -3,7 +3,7 @@
 # Please execute separately (only related to endpoints).
 
 
-# --------------------------------- endpoints' ---------------------------------
+# --------------------------------- endpoint's ---------------------------------
 note_skip_create = True
 note_skip_get = True
 note_skip_gets = True

@@ -1,7 +1,12 @@
 import pytest
 
-from tests.unit_tests.conftest import analytic_skip_word_count, analytic_skip_avg_note_length, analytic_skip_common_word, \
-    analytic_skip_longest_note, analytic_skip_shortest_note
+from tests.unit_tests.conftest import (
+    analytic_skip_word_count,
+    analytic_skip_avg_note_length,
+    analytic_skip_common_word,
+    analytic_skip_longest_note,
+    analytic_skip_shortest_note
+)
 from tests.unit_tests.service_tests.conftest import analytics_service
 
 
@@ -16,6 +21,7 @@ def test_get_total_word_count(analytics_service, expected_word_count):
        word count across all notes"""
 
     assert analytics_service.get_total_word_count() == expected_word_count
+    assert type(analytics_service.get_total_word_count()) == int
 # ----------------------------TOTAL WORD COUNT----------------------------------------------------
 
 
@@ -30,6 +36,7 @@ def test_get_average_note_length(analytics_service, expected_avg_length):
         average word count per note."""
 
     assert analytics_service.get_average_note_length() == expected_avg_length
+    assert type(analytics_service.get_average_note_length()) == float
 # ----------------------------AVERAGE NOTE LENGTH----------------------------------------------------
 
 
@@ -47,6 +54,7 @@ def test_get_most_common_words(analytics_service, min_count, expected_common_wor
        appear at least 'min_count' times."""
 
     assert analytics_service.get_most_common_words(min_count) == expected_common_words
+    assert type(analytics_service.get_most_common_words(min_count)) == dict
 # ----------------------------COMMON WORDS----------------------------------------------------
 
 
@@ -62,6 +70,7 @@ def test_get_longest_notes(analytics_service, top_n, expected_longest_notes):
     """Test that the 'get_longest_notes' method correctly identifies the top 'top_n'
        longest notes based on word count."""
     assert analytics_service.get_longest_notes(top_n) == expected_longest_notes
+    assert type(analytics_service.get_longest_notes(top_n)) == list
 # ----------------------------LONGEST NOTES----------------------------------------------------
 
 
@@ -77,4 +86,5 @@ def test_get_shortest_notes(analytics_service, top_n, expected_shortest_notes):
     """Test that the 'get_shortest_notes' method correctly identifies the top 'top_n'
         shortest notes based on word count."""
     assert analytics_service.get_shortest_notes(top_n) == expected_shortest_notes
+    assert type(analytics_service.get_shortest_notes(top_n)) == list
 # ----------------------------SHORTEST NOTES----------------------------------------------------
