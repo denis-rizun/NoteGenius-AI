@@ -29,6 +29,10 @@ docker-compose up --build
 
 ### Running Tests
 ```sh
+docker-compose run --rm web pytest
+```
+or
+```sh
 docker-compose run test
 ```
 
